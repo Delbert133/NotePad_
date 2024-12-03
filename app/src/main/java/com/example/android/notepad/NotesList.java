@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.notepad;
 
 import com.example.android.notepad.NotePad;
@@ -52,16 +36,6 @@ import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-/**
- * Displays a list of notes. Will display notes from the {@link Uri}
- * provided in the incoming Intent if there is one, otherwise it defaults to displaying the
- * contents of the {@link NotePadProvider}.
- *
- * NOTE: Notice that the provider operations in this Activity are taking place on the UI thread.
- * This is not a good practice. It is only done here to make the code more readable. A real
- * application should use the {@link android.content.AsyncQueryHandler} or
- * {@link android.os.AsyncTask} object to perform operations asynchronously on a separate thread.
- */
 public class NotesList extends ListActivity {
 
     // For logging and debugging
@@ -73,10 +47,7 @@ public class NotesList extends ListActivity {
     private String currentColor;
 
     private ImageButton colorImageButton;
-
-
-
-
+    
     /**
      * The columns needed by the cursor adapter
      */
@@ -280,34 +251,12 @@ public class NotesList extends ListActivity {
         editor.commit();
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-
-    /**
-     * Called when the user clicks the device's Menu button the first time for
-     * this Activity. Android passes in a Menu object that is populated with items.
-     *
-     * Sets up a menu that provides the Insert option plus a list of alternative actions for
-     * this Activity. Other applications that want to handle notes can "register" themselves in
-     * Android by providing an intent filter that includes the category ALTERNATIVE and the
-     * mimeTYpe NotePad.Notes.CONTENT_TYPE. If they do this, the code in onCreateOptionsMenu()
-     * will add the Activity that contains the intent filter to its list of options. In effect,
-     * the menu will offer the user other applications that can handle notes.
-     * @param menu A Menu object, to which menu items should be added.
-     * @return True, always. The menu should be displayed.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu from XML resource
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.list_options_menu, menu);
-
-        // Generate any additional actions that can be performed on the
-        // overall list.  In a normal install, there are no additional
-        // actions found here, but this allows other applications to extend
-        // our menu with their own actions.
+        
         Intent intent = new Intent(null, getIntent().getData());
         intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
         menu.addIntentOptions(Menu.CATEGORY_ALTERNATIVE, 0, 0,
@@ -338,11 +287,6 @@ public class NotesList extends ListActivity {
         // Gets the number of notes currently being displayed.
         final boolean haveItems = getListAdapter().getCount() > 0;
 
-        // If there are any notes in the list (which implies that one of
-        // them is selected), then we need to generate the actions that
-        // can be performed on the current selection.  This will be a combination
-        // of our own specific actions along with any extensions that can be
-        // found.
         if (haveItems) {
 
             // This is the selected item.
@@ -360,11 +304,6 @@ public class NotesList extends ListActivity {
 
             // Creates an Intent with no specific action, using the URI of the selected note.
             Intent intent = new Intent(null, uri);
-
-            /* Adds the category ALTERNATIVE to the Intent, with the note ID URI as its
-             * data. This prepares the Intent as a place to group alternative options in the
-             * menu.
-             */
             intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
 
             /*
@@ -396,18 +335,6 @@ public class NotesList extends ListActivity {
         return true;
     }
 
-    /**
-     * This method is called when the user selects an option from the menu, but no item
-     * in the list is selected. If the option was INSERT, then a new Intent is sent out with action
-     * ACTION_INSERT. The data from the incoming Intent is put into the new Intent. In effect,
-     * this triggers the NoteEditor activity in the NotePad application.
-     *
-     * If the item was not INSERT, then most likely it was an alternative option from another
-     * application. The parent method is called to process the item.
-     * @param item The menu item that was selected by the user
-     * @return True, if the INSERT menu item was selected; otherwise, the result of calling
-     * the parent method.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -432,19 +359,6 @@ public class NotesList extends ListActivity {
         }
     }
 
-    /**
-     * This method is called when the user context-clicks a note in the list. NotesList registers
-     * itself as the handler for context menus in its ListView (this is done in onCreate()).
-     *
-     * The only available options are COPY and DELETE.
-     *
-     * Context-click is equivalent to long-press.
-     *
-     * @param menu A ContexMenu object to which items should be added.
-     * @param view The View for which the context menu is being constructed.
-     * @param menuInfo Data associated with view.
-     * @throws ClassCastException
-     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 
@@ -461,12 +375,6 @@ public class NotesList extends ListActivity {
             return;
         }
 
-        /*
-         * Gets the data associated with the item at the selected position. getItem() returns
-         * whatever the backing adapter of the ListView has associated with the item. In NotesList,
-         * the adapter associated all of the data for a note with its list item. As a result,
-         * getItem() returns that data as a Cursor.
-         */
         Cursor cursor = (Cursor) getListAdapter().getItem(info.position);
 
         // If the cursor is empty, then for some reason the adapter can't get the data from the
@@ -495,33 +403,10 @@ public class NotesList extends ListActivity {
                 new ComponentName(this, NotesList.class), null, intent, 0, null);
     }
 
-    /**
-     * This method is called when the user selects an item from the context menu
-     * (see onCreateContextMenu()). The only menu items that are actually handled are DELETE and
-     * COPY. Anything else is an alternative option, for which default handling should be done.
-     *
-     * @param item The selected menu item
-     * @return True if the menu item was DELETE, and no default processing is need, otherwise false,
-     * which triggers the default handling of the item.
-     * @throws ClassCastException
-     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         // The data from the menu item.
         AdapterView.AdapterContextMenuInfo info;
-
-        /*
-         * Gets the extra info from the menu item. When an note in the Notes list is long-pressed, a
-         * context menu appears. The menu items for the menu automatically get the data
-         * associated with the note that was long-pressed. The data comes from the provider that
-         * backs the list.
-         *
-         * The note's data is passed to the context menu creation routine in a ContextMenuInfo
-         * object.
-         *
-         * When one of the context menu items is clicked, the same data is passed, along with the
-         * note ID, to onContextItemSelected() via the item parameter.
-         */
         try {
             // Casts the data object in the item into the type for AdapterView objects.
             info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -604,17 +489,7 @@ public class NotesList extends ListActivity {
         }
     }
 
-    /**
-     * This method is called when the user clicks a note in the displayed list.
-     *
-     * This method handles incoming actions of either PICK (get data from the provider) or
-     * GET_CONTENT (get or create data). If the incoming action is EDIT, this method sends a
-     * new Intent to start NoteEditor.
-     * @param l The ListView that contains the clicked item
-     * @param v The View of the individual item
-     * @param position The position of v in the displayed list
-     * @param id The row ID of the clicked item
-     */
+
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
