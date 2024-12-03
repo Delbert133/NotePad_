@@ -1,30 +1,8 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.notepad;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Defines a contract between the Note Pad content provider and its clients. A contract defines the
- * information that a client needs to access the provider as one or more data tables. A contract
- * is a public, non-extendable (final) class that contains constants defining column names and
- * URIs. A well-written client depends only on the constants in the contract.
- */
 public final class NotePad {
     public static final String AUTHORITY = "com.google.provider.NotePad";
 
