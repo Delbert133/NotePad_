@@ -1,6 +1,3 @@
-/**
- * Automatically generated file. DO NOT MODIFY
- */
 package com.example.android.notepad.tests;
 
 public final class BuildConfig {
