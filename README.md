@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="2017/4/25 16:25:30"
+                    android:text="2024/11/30 13:38:26"
                     android:textColor="#000000" />
             </LinearLayout>
 
