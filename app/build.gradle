@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.1"
+    compileSdkVersion 34
+    buildToolsVersion "34.0.1"
 
     defaultConfig {
         applicationId "com.example.android.notepad"
-        minSdkVersion 11
-        targetSdkVersion 28
+        minSdk = 27
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+        
 
         testApplicationId "com.example.android.notepad.tests"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
