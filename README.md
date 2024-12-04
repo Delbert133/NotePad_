@@ -9,7 +9,7 @@
 * 添加分享功能
 * 添加撤销操作
 ## 一.添加时间戳 
-### 1.新建一个noteslist_item_new.xml,在这中间设置要显示的时间框以及图片
+### 1.在noteslist_item.xml,中设置要显示的时间框以及图片
 ```java
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#00000000"
+            android:background="#000000"
             android:layout_marginTop="10dp"
             >
 
@@ -67,8 +67,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="2024/11/30 13:38:26"
-                    android:textColor="#000000" />
+                    android:text="2024/11/28 12:42:16"
+                    android:textColor="#3333FF" />
             </LinearLayout>
 
             <LinearLayout
