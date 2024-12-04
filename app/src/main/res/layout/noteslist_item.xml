@@ -1,26 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--notepad便签条目显示界面的，listadapter 每个条目对应的layout-->
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/text1"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textSize="30dp"
-        />
+    android:descendantFocusability="blocksDescendants"
+    android:id="@+id/notesItem"
+    android:weightSum="1">
+        <!--android:layout_marginBottom="5dp"-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            android:layout_marginTop="10dp"
+            >
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:textAlignment="center"
-        android:textSize="18dp"
-        android:gravity="center_vertical"
-        />
+        </LinearLayout>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:orientation="horizontal"
+            android:layout_weight="2.95"
+            android:weightSum="1">
+
+            <ImageView
+                android:layout_width="81dp"
+                android:layout_height="71dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/cute" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1"
+                android:layout_weight="1.42">
+
+                <TextView
+                    android:id="@+id/mytitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Title"
+                    android:textColor="#3333FF"
+                    android:textSize="20sp"
+                    android:layout_weight="0.38"/>
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="2024/11/28 12:42:16"
+                    android:textColor="#3333FF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="87dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageButton
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_delete"
+                    android:background="@android:color/transparent"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
