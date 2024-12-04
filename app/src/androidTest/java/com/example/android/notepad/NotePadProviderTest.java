@@ -20,7 +20,6 @@ import java.util.GregorianCalendar;
 
 public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
 
-    // A URI that the provider does not offer, for testing error handling.
     private static final Uri INVALID_URI =
         Uri.withAppendedPath(NotePad.Notes.CONTENT_URI, "invalid");
 
@@ -60,19 +59,10 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
     // for a particular note. The filter will retrieve any MIME types supported for the content URI.
     private final static String MIME_TYPES_ALL = "*/*";
 
-    // Sets a MIME type filter, used to test provider methods that return more than one MIME type
-    // for a particular note. The filter is nonsense, so it will not retrieve any MIME types.
     private final static String MIME_TYPES_NONE = "qwer/qwer";
 
-    // Sets a MIME type filter for plain text, used to the provider's methods that only handle
-    // plain text
     private final static String MIME_TYPE_TEXT = "text/plain";
 
-    /*
-     * Constructor for the test case class.
-     * Calls the super constructor with the class name of the provider under test and the
-     * authority name of the provider.
-     */
     public NotePadProviderTest() {
         super(NotePadProvider.class, NotePad.AUTHORITY);
     }
@@ -132,10 +122,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
         mimeType = mMockResolver.getType(INVALID_URI);
     }
 
-    /*
-     * Tests the provider's stream MIME types returned by getStreamTypes(). If the provider supports
-     * stream data for the URI, the MIME type is returned. Otherwise, the provider returns null.
-     */
     public void testGetStreamTypes() {
 
         // Tests the notes table URI. This should return null, since the content provider does
@@ -163,10 +149,7 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
         mimeType = mMockResolver.getStreamTypes(testUri, MIME_TYPES_NONE);
         assertNull(mimeType);
 
-        /*
-         * Tests with a URI that should not have any associated stream MIME types, but with a
-         * filter that returns all types. The result should still be null.
-         */
+   
         mimeType = mMockResolver.getStreamTypes(NotePad.Notes.CONTENT_URI, MIME_TYPES_ALL);
         assertNull(mimeType);
 
