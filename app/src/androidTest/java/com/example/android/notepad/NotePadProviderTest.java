@@ -18,14 +18,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/*
- */
-/**
- * This class tests the content provider for the Note Pad sample application.
- *
- * To learn how to run an entire test package or one of its classes, please see
- * "Testing in Eclipse, with ADT" or "Testing in Other IDEs" in the Developer Guide.
- */
 public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
 
     // A URI that the provider does not offer, for testing error handling.
@@ -85,10 +77,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
         super(NotePadProvider.class, NotePad.AUTHORITY);
     }
 
-    /*
-     * Sets up the test environment before each test method. Creates a mock content resolver,
-     * gets the provider under test, and creates a new database for the provider.
-     */
     @Override
     protected void setUp() throws Exception {
         // Calls the base class implementation of this method.
@@ -96,29 +84,14 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
 
         // Gets the resolver for this test.
         mMockResolver = getMockContentResolver();
-
-        /*
-         * Gets a handle to the database underlying the provider. Gets the provider instance
-         * created in super.setUp(), gets the DatabaseOpenHelper for the provider, and gets
-         * a database object from the helper.
-         */
         mDb = getProvider().getOpenHelperForTest().getWritableDatabase();
     }
 
-    /*
-     *  This method is called after each test method, to clean up the current fixture. Since
-     *  this sample test case runs in an isolated context, no cleanup is necessary.
-     */
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
     }
 
-    /*
-     * Sets up test data.
-     * The test data is in an SQL database. It is created in setUp() without any data,
-     * and populated in insertData if necessary.
-     */
     private void insertData() {
         // Creates an instance of the ContentValues map type expected by database insertions
         ContentValues values = new ContentValues();
@@ -139,11 +112,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
         }
     }
 
-    /*
-     * Tests the provider's publicly available URIs. If the URI is not one that the provider
-     * understands, the provider should throw an exception. It also tests the provider's getType()
-     * method for each URI, which should return the MIME type associated with the URI.
-     */
     public void testUriAndGetType() {
         // Tests the MIME type for the notes table URI.
         String mimeType = mMockResolver.getType(NotePad.Notes.CONTENT_URI);
@@ -177,14 +145,7 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
         // Tests the live folders URI. This should return null, since the content provider does not
         // provide a stream MIME type for multiple notes.
         assertNull(mMockResolver.getStreamTypes(NotePad.Notes.LIVE_FOLDER_URI, MIME_TYPES_ALL));
-
-        /*
-         * Tests the note id URI for a single note, using _ID value "1" which is a valid ID. Uses a
-         * valid MIME type filter that will return all the supported MIME types for a content URI.
-         * The result should be "text/plain".
-         */
-
-        // Constructs the note id URI
+        
         Uri testUri = Uri.withAppendedPath(NotePad.Notes.CONTENT_ID_URI_BASE, "1");
 
         // Gets the MIME types for the URI, with the filter that selects all MIME types.
@@ -211,12 +172,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
 
     }
 
-    /*
-     * Tests the provider's public API for opening a read-only pipe of data for a note ID URI
-     * and MIME type filter matching "text/plain".
-     * This method throws a FileNotFoundException if the URI isn't for a note ID or the MIME type
-     * filter isn't "text/plain". It throws an IOException if it can't close a file descriptor.
-     */
     public void testOpenTypedAssetFile() throws FileNotFoundException, IOException {
 
         // A URI to contain a note ID content URI.
@@ -279,13 +234,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
             // continue
         }
 
-        /*
-         * Changes back to the note ID URI, but changes the MIME type filter to one that is not
-         * supported by the provider. This should also fail, since the provider will only open a
-         * pipe for MIME type "text/plain". A FileNotFound exception is expected, so calls
-         * fail() if it does *not* occur.
-         */
-
         try {
             testAssetDescriptor = mMockResolver.openTypedAssetFileDescriptor(
                     testNoteIdUri,
@@ -299,87 +247,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
 
     }
 
-    /*
-     * Tests the provider's method for actually returning writing data into a pipe. The method is
-     * writeDataToPipe, but this method is not called directly. Instead, a caller invokes
-     * openTypedAssetFile(). That method uses ContentProvider.openPipeHelper(), which has as one of
-     * its arguments a ContentProvider.PipeDataWriter object that must actually put the data into
-     * the pipe. PipeDataWriter is an interface, not a class, so it must be implemented.
-     *
-     * The NotePadProvider class itself implements the "ContentProvider.PipeDataWriter, which means
-     * that it supplies the interface's only method, writeDataToPipe(). In effect, a call to
-     * openTypedAssetFile() calls writeDataToPipe().
-     *
-     *  The test of writeDataToPipe() is separate from other tests of openTypedAssetFile() for the
-     *  sake of clarity.
-     */
-    public void testWriteDataToPipe() throws FileNotFoundException {
-
-        // A string array to hold the incoming data
-        String[] inputData = {"","",""};
-
-        // A URI for a note ID.
-        Uri noteIdUri;
-
-        // A Cursor to contain the retrieved note.
-        Cursor noteIdCursor;
-
-        // An AssetFileDescriptor for the pipe.
-        AssetFileDescriptor noteIdAssetDescriptor;
-
-        // The ParcelFileDescriptor in the AssetFileDescriptor
-        ParcelFileDescriptor noteIdParcelDescriptor;
-
-        // Inserts test data into the provider.
-        insertData();
-
-        // Creates note ID URI for a note that should now be in the provider.
-        noteIdUri = ContentUris.withAppendedId(
-                NotePad.Notes.CONTENT_ID_URI_BASE,  // The base pattern for a note ID URI
-                1                                   // Sets the URI to point to record ID 1 in the
-                                                    // provider
-        );
-
-        // Gets a Cursor for the note.
-        noteIdCursor = mMockResolver.query(
-                noteIdUri,  // the URI for the note ID we want to retrieve
-                null,       // no projection, retrieve all the columns
-                null,       // no WHERE clause
-                null,       // no WHERE arguments
-                null        // default sort order
-        );
-
-        // Checks that the call worked.
-        // a) Checks that the cursor is not null
-        // b) Checks that it contains a single record
-        assertNotNull(noteIdCursor);
-        assertEquals(1,noteIdCursor.getCount());
-
-        // Opens the pipe that will contain the data.
-        noteIdAssetDescriptor = mMockResolver.openTypedAssetFileDescriptor(
-                noteIdUri,        // the URI of the note that will provide the data
-                MIME_TYPE_TEXT,   // the "text/plain" MIME type
-                null              // no other options
-        );
-
-        // Checks that the call worked.
-        // a) checks that the AssetFileDescriptor is not null
-        // b) gets its ParcelFileDescriptor
-        // c) checks that the ParcelFileDescriptor is not null
-        assertNotNull(noteIdAssetDescriptor);
-        noteIdParcelDescriptor = noteIdAssetDescriptor.getParcelFileDescriptor();
-        assertNotNull(noteIdParcelDescriptor);
-
-        // Gets a File Reader that can read the pipe.
-        FileReader fIn = new FileReader(noteIdParcelDescriptor.getFileDescriptor());
-
-        // Gets a buffered reader wrapper for the File Reader. This allows reading line by line.
-        BufferedReader bIn = new BufferedReader(fIn);
-
-        /*
-         * The pipe should contain three lines: The note's title, an empty line, and the note's
-         * contents. The following code reads and stores these three lines.
-         */
         for (int index = 0; index < inputData.length; index++) {
             try {
                 inputData[index] = bIn.readLine();
@@ -530,11 +397,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
                                               // record's id in the data model
            NotePad.Notes.COLUMN_NAME_TITLE};  // The note's title
 
-      // Query subtest 1.
-      // Tests that a query against an empty table returns null.
-
-      // Constructs a URI that matches the provider's notes id URI pattern, using an arbitrary
-      // value of 1 as the note ID.
       Uri noteIdUri = ContentUris.withAppendedId(NotePad.Notes.CONTENT_ID_URI_BASE, 1);
 
       // Queries the table with the notes ID URI. This should return an empty cursor.
@@ -549,11 +411,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
       // Asserts that the cursor is null.
       assertEquals(0,cursor.getCount());
 
-      // Query subtest 2.
-      // Tests that a query against a table containing records returns a single record whose ID
-      // is the one requested in the URI provided.
-
-      // Inserts the test data into the provider's underlying data source.
       insertData();
 
       // Queries the table using the URI for the full table.
@@ -781,11 +638,6 @@ public class NotePadProviderTest extends ProviderTestCase2<NotePadProvider> {
         long createDate;
         long modDate;
 
-        /*
-         * Constructor for a NoteInfo instance. This class helps create a note and
-         * return its values in a ContentValues map expected by data model methods.
-         * The note's id is created automatically when it is inserted into the data model.
-         */
         public NoteInfo(String t, String n) {
             title = t;
             note = n;
