@@ -71,21 +71,6 @@
                     android:textColor="#3333FF" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="87dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <ImageButton
-                    android:id="@+id/deleteButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_delete"
-                    android:background="@android:color/transparent"/>
-            </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 ```
